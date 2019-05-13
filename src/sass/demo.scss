@@ -1,1 +1,23 @@
 /* from demo */
+
+ 
+
+.nav-demo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: #008;
+    position: relative;
+   // list-style: none;
+    margin: 70px;
+    padding: 10px;
+    z-index: 15;
+    
+}
+
+html, body {
+    background-color: white;
+}
+
+
