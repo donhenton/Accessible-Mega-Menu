@@ -1,2 +1,5 @@
- @import "demo.scss";
- @import "megamenu.scss";
+@import "_reset.scss";
+@import "_mixins.scss";
+@import "fontawesome/font-awesome.scss"; 
+@import "demo.scss";
+@import "megamenu.scss";

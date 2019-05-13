@@ -1,19 +1,26 @@
 /* from demo */
 
- 
+$menuColor: lightgray;
+$menuTextColor: black;
 
 .nav-demo {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 50%;
-    background-color: #008;
+    font-family: Verdana;
+    background-color: $menuColor;
     position: relative;
-   // list-style: none;
     margin: 70px;
     padding: 10px;
     z-index: 15;
-    
+    ul {
+        padding-inline-start: 0px;
+        ul {
+            list-style: none;
+        }
+    }
+
 }
 
 html, body {

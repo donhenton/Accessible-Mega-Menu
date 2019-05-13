@@ -1,0 +1,9 @@
+
+
+@mixin forLargeScreens($width) {
+    @media (min-width: $width+px) { @content }
+}
+
+@mixin forSmallScreens($width) {
+    @media (max-width: $width+px) { @content }
+}

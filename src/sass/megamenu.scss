@@ -1,6 +1,7 @@
 /* from megamenu */
 .accessible-megamenu {
- 
+
+
     /* a top level navigation item in the mega menu */
     .accessible-megamenu-top-nav-item {
         list-style: none;
@@ -8,77 +9,96 @@
         padding: 10px;
         margin: 1opx;
 
-    }
 
-    /* first descendant link within a top level navigation item */
-    .accessible-megamenu-top-nav-item > a {
-        position: relative;
-        display: inline-block;
-        border: thin solid white;
-        padding: 0.5em 1em;
-        // margin: 0 0 -1px 0;
-        margin: 0px 50px;
-        color: white;
-        text-decoration: none;
-        font-family: Verdana;
-        outline: none;  
 
-    }
 
-    /* focus/open states of first descendant link within a top level
-       navigation item */
-    .accessible-megamenu-top-nav-item > a:focus,
-        .accessible-megamenu-top-nav-item > a.open {
-        border: 1px solid #37ffc4;
+        /* first descendant link within a top level navigation item */
+        & > a {
+            position: relative;
+            display: inline-block;
 
-    }
+            padding: 0.5em 1em;
+            // margin: 0 0 -1px 0;
+            margin: 0px 50px;
+            color: $menuTextColor;
+            text-decoration: none;
 
-    /* open state of first descendant link within a top level
-       navigation item */
-    .accessible-megamenu-top-nav-item > a.open {
-        background-color: #fff;
-        border-bottom: none;
-        z-index: 1;
-    }
+
+
+            /* focus/open states of first descendant link within a top level
+                navigation item */
+            &:focus,
+                &.open {
+                  //border: 1px solid #37ffc4;
+
+            }
+
+
+            /* open state of first descendant link within a top level
+               navigation item */
+            &.open {
+                background-color: #fff;
+                border-bottom: none;
+                z-index: 1;
+            }
+
+
+        }
+
+    } //accessible-megamenu-top-nav-item
+
+
+
+
 
     /* accessible-megamenu-paneligation panel */
     .accessible-megamenu-panel {
         position: absolute;
-        display: block;
+        display: none;
         top: 80px;
-       // left: 20px;
+         
+        // left: 20px;
         //margin-top: -1px;
         padding: 0.5em 1em;
-        border: 1px solid #dedede;
-        background-color: lightgray;
-        
-         /* accessible-megamenu-paneligation panel open state */
-        &.open {
-             display: block;
+        border: 2px solid darkgrey;
+        -webkit-box-shadow: 7px 10px 20px 0px rgba(0,0,0,0.35);
+        -moz-box-shadow: 7px 10px 20px 0px rgba(0,0,0,0.35);
+        box-shadow: 7px 10px 20px 0px rgba(0,0,0,0.35);
+        background-color: $menuColor;
+        line-height: 35px;
+        a {
+            text-decoration: none;
+            color: $menuTextColor;
         }
-        
-        
-        
-        
+
+
+        /* accessible-megamenu-paneligation panel open state */
+        &.open {
+            display: block;
+        }
+
+
+
+
     }
 
-   
+
+
+
+    /*     list of items within accessible-megamenu-paneligation panel 
+        .accessible-megamenu-panel ul {
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 1em 0 0;
+            padding: 0;
+        }
     
-
-/*     list of items within accessible-megamenu-paneligation panel 
-    .accessible-megamenu-panel ul {
-        display: inline-block;
-        vertical-align: top;
-        margin: 0 1em 0 0;
-        padding: 0;
-    }
-
-     list item within accessible-megamenu-paneligation panel 
-    .accessible-megamenu-panel li {
-        display: block;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-    }*/
+         list item within accessible-megamenu-paneligation panel 
+        .accessible-megamenu-panel li {
+            display: block;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }*/
 
 }
