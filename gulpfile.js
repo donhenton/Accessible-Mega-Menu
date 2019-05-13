@@ -17,14 +17,14 @@ var concat = require('gulp-concat');
 
 gulp.task('clean', function (  ) {
 
-    del(['target','public_html/css/megamenu.css']);
+    del(['target','public_html/css/main.css']);
 
 });
 
 
 
 gulp.task('compile-sass', function() {
-	return gulp.src('./src/sass/megamenu.scss')
+	return gulp.src('./src/sass/main.scss')
 	  .pipe(sourcemaps.init())
 	  .pipe(sass().on('error', sass.logError))
 	  .pipe(sourcemaps.write())
@@ -32,7 +32,7 @@ gulp.task('compile-sass', function() {
 		//	browsers: ['last 2 versions', 'Explorer 9']
 		//}))
 		.pipe(sass())
-		.pipe(concat('megamenu.css'))
+		.pipe(concat('main.css'))
             // .pipe(uglifycss())
             .pipe(gulp.dest('./public_html/css/'))
 		//.pipe(browserSync.reload({stream: true}))
@@ -49,7 +49,7 @@ gulp.task('serve', ['compile-sass'], function() {
     });
 
     gulp.watch(SASS_FILES, ['compile-sass'] ) ;
-    gulp.watch("public_html/css/megamenu.css").on('change', browserSync.reload);
+    gulp.watch("public_html/css/main.css").on('change', browserSync.reload);
     gulp.watch("public_html/**/*.html").on('change', browserSync.reload);
     gulp.watch("public_html/js/**/*.js").on('change', browserSync.reload);
 });
