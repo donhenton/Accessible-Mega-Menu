@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/adobe-accessibility/Accessible-Mega-Menu/issues"
   },
-  "homepage": "https://github.com/adobe-accessibility/Accessible-Mega-Menu#readme"
+  "homepage": "https://github.com/adobe-accessibility/Accessible-Mega-Menu#readme",
+  "devDependencies": {
+    "babel-preset-env": "1.7.0",
+    "browser-sync": "2.26.3",
+    "browser-sync-logger": "1.0.3",
+    "del": "^2.2.0",
+    "gulp": "^3.8.11",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^2.0.1",
+    "gulp-sourcemaps": "2.6.4"
+  }
 }
