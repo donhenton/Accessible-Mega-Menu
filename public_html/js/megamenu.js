@@ -200,8 +200,8 @@ class MegaSubPanel {
     this.isLast = b;
   }
   panelKeyDown(ev) {
-    console.log(`panel Out ${ev.keyCode}`)
-    console.log(ev)
+   // console.log(`panel Out ${ev.keyCode}`)
+   // console.log(ev)
     let me = this;
 
     if (this.isLast === true) {
