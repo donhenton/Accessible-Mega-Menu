@@ -31,6 +31,7 @@ const   Keyboard = {
   RIGHT: 39,
   SPACE: 32,
   TAB: 9,
+  SHIFT_TAB: 999,
   UP: 38,
   keyMap: {
     48: "0",
@@ -95,7 +96,7 @@ class MegaMenu {
     // this.menu.addEventListener('focusout', this.focusOut.bind(this));
     this.menu.addEventListener('blur', this.blurFunction.bind(this));
     this.menu.addEventListener('focus', this.linkFunction.bind(this));
-   // document.body.addEventListener('keydown', this.bodyClear.bind(this));
+    document.body.addEventListener('click', this.bodyClear.bind(this));
     this.selectedMenuId;
     this.lastMenuId;
     this.inMenu = false;
@@ -113,10 +114,10 @@ class MegaMenu {
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
 
   }
- // bodyClear(ev) {
- //   console.log('body clear')
-    // console.log(ev)
-  //}
+  bodyClear(ev) {
+    this.resetPanels();
+
+  }
   linkFunction(ev) {
     console.log('menu focus')
   }
@@ -127,12 +128,12 @@ class MegaMenu {
 //    console.log('mega menu focusout')
 //  }
   resetPanels() {
-     this.subPanels.forEach(p => {
-       
-        p.displayMenu(false);
-      
+    this.subPanels.forEach(p => {
+
+      p.displayMenu(false);
+
     })
-   
+
   }
 //    
 //  
@@ -166,7 +167,7 @@ class MegaSubPanel {
     this.panelLink.addEventListener('focus', this.linkFocus.bind(this));
     this.panelLink.addEventListener('blur', this.linkBlur.bind(this));
     this.panelLink.addEventListener('click', this.linkClick.bind(this));
-    this.panelLink.addEventListener('keydown', this.linkKeyDown.bind(this));
+
     this.panelUUID = this.uuidv4();
     this.linkUUID = this.uuidv4();
     this.isSelected = false;
@@ -187,7 +188,8 @@ class MegaSubPanel {
     this.panel.setAttribute('aria-expanded', 'false');
     this.panel.setAttribute('aria-labeled-by', this.linkUUID);
     this.panel.setAttribute('tab-index', '0');
-    this.panel.addEventListener('focusout', this.panelOut.bind(this));
+    // this.panel.addEventListener('focusout', this.panelOut.bind(this));
+    this.panel.addEventListener('keydown', this.panelKeyDown.bind(this));
     this.tabCollection = new Tabbable(this.panel, {includeHidden: true});
     this.isLast = false;
 
@@ -197,17 +199,23 @@ class MegaSubPanel {
   setAsLast(b) {
     this.isLast = b;
   }
-  panelOut(ev) {
+  panelKeyDown(ev) {
+    console.log(`panel Out ${ev.keyCode}`)
+    console.log(ev)
     let me = this;
+
     if (this.isLast === true) {
       this.tabCollection.tabbableNodes.forEach((tNode, idx) => {
         let isTheSame = tNode.isEqualNode(ev.srcElement);
-      //  console.log(`${idx} ${isTheSame} src ${ev.srcElement} tabNode ${tNode} `)
-      //you are on the last menu
-      //and just tabbed off the last tabbable item onto the main page
-      
-        if (idx === me.tabCollection.tabbableNodes.length -1 && 
-              isTheSame === true) {
+        //  console.log(`${idx} ${isTheSame} src ${ev.srcElement} tabNode ${tNode} `)
+        //you are on the last menu
+        //and just tabbed off the last tabbable item onto the main page
+        //assuming you are moving off with the tab key
+        //skip below if the key press is SHIFT TAB
+
+        if (idx === me.tabCollection.tabbableNodes.length - 1 &&
+              isTheSame === true && ev.keyCode === Keyboard.TAB
+              && ev.shiftKey === false) {
           me.menuParent.resetPanels();
         }
 
@@ -255,21 +263,21 @@ class MegaSubPanel {
 
 
   }
-  linkKeyDown(ev) {
-  //  console.log(`keyboard ${ev.keyCode}   `)
-
-    switch (event.keyCode) {
-      case Keyboard.ESCAPE:
-        this.displayMenu(false);
-        break;
-      case Keyboard.DOWN:
-      case Keyboard.SPACE:
-        this.displayMenu(true);
-        break;
-      default:
-      // code block
-    }
-  }
+//  linkKeyDown(ev) {
+//       console.log(`keyboard ${ev.keyCode}   `)
+//
+//    switch (event.keyCode) {
+//      case Keyboard.ESCAPE:
+//        this.displayMenu(false);
+//        break;
+//      case Keyboard.DOWN:
+//      case Keyboard.SPACE:
+//        this.displayMenu(true);
+//        break;
+//      default:
+//      // code block
+//    }
+//  }
   linkClick(ev) {
 
     ev.preventDefault();
