@@ -1,5 +1,14 @@
+$comic-book-blue: #86aede;
+$comic-off-white: rgb(242,246,251);
+$orange-highlight: rgb(245,175,102);
+$comic-dark-blue: rgb(70,116,172);
+$break-640: 635;
+
+
 @import "_reset.scss";
 @import "_mixins.scss";
+@import "_modularscale.scss"; //this is derived from github http://www.modularscale.com/?16,1280,16.842374276836924&px&1.618
+@import "_typography.scss";
 @import "fontawesome/font-awesome.scss"; 
 @import "demo.scss";
 @import "megamenu.scss";

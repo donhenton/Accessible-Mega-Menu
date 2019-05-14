@@ -122,7 +122,6 @@ class MegaMenu {
 class MegaSubPanel {
   constructor(topNav, menuParent) {
     this.topNav = topNav;
-    //this.subPanel = panel;
     this.menuParent = menuParent;
     this.panelLink = topNav.querySelector('a');
     this.panel = topNav.querySelector("." + menuParent.defaults.panelClass);
@@ -131,7 +130,10 @@ class MegaSubPanel {
     this.panelLink.addEventListener('click', this.linkClick.bind(this));
     this.uuid = this.uuidv4();
     this.isSelected = false;
-
+    let linkBlock = this.panelLink.getBoundingClientRect();
+    console.log(linkBlock)
+    this.panel.style.left = (linkBlock.left + linkBlock.width/2)+"px";
+    this.panel.style.top = (linkBlock.top + linkBlock.height*.8)+"px";
 
   }
   displayMenu(show) {
@@ -148,12 +150,15 @@ class MegaSubPanel {
     });
   }
   linkBlur(ev) {
-    console.log("blur " + this.uuid);
-
+    //check to see if you are losing focus and are the last member of the list
+    if (this.menuParent.subPanels[this.menuParent.subPanels.length-1].uuid 
+          === this.uuid) {
+      this.displayMenu(false)
+    }
 
   }
   linkFocus(ev) {
-    console.log("focus " + this.uuid);
+   // console.log("focus " + this.uuid);
     this.isSelected = true;
     this.menuParent.updateMenuPanels(this.uuid);
     // this.panel.style.display = 'block'
