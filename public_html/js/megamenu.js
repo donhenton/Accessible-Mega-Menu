@@ -92,7 +92,13 @@ class MegaMenu {
 
     this.defaults = {...stdDefaults, ...defs};
     this.menu = menu;
+    // this.menu.addEventListener('focusout', this.focusOut.bind(this));
+    this.menu.addEventListener('blur', this.blurFunction.bind(this));
+    this.menu.addEventListener('focus', this.linkFunction.bind(this));
+   // document.body.addEventListener('keydown', this.bodyClear.bind(this));
     this.selectedMenuId;
+    this.lastMenuId;
+    this.inMenu = false;
     if (!Array.from(menu.classList).includes(this.defaults.menuClass)) {
 
       throw new Error("must submit the ul with the css class of defaults.menuClass")
@@ -102,20 +108,52 @@ class MegaMenu {
     Array.from(this.menu.querySelectorAll("." + this.defaults.topNavItemClass))
           .forEach(topNav => {
             me.subPanels.push(new MegaSubPanel(topNav, me))
-          })
-
+          });
+    this.lastMenuId = this.subPanels[this.subPanels.length - 1].uuid;
+    this.subPanels[this.subPanels.length - 1].setAsLast(true);
 
   }
+ // bodyClear(ev) {
+ //   console.log('body clear')
+    // console.log(ev)
+  //}
+  linkFunction(ev) {
+    console.log('menu focus')
+  }
+  blurFunction(ev) {
+    console.log('blur menu')
+  }
+//  focusOut(ev) {
+//    console.log('mega menu focusout')
+//  }
+  resetPanels() {
+     this.subPanels.forEach(p => {
+       
+        p.displayMenu(false);
+      
+    })
+   
+  }
+//    
+//  
+
+
+
   updateMenuPanels(newSelectedId) {
     this.subPanels.forEach(p => {
-      if (p.uuid === newSelectedId) {
+      if (p.panelUUID === newSelectedId) {
         p.displayMenu(true);
 
       } else {
         p.displayMenu(false);
       }
     })
+    if (!this.selectedMenuId && newSelectedId) {
+      this.inMenu = true;
+      console.log("entering the menu");
+    }
     this.selectedMenuId = newSelectedId;
+
   }
 }
 
@@ -128,20 +166,70 @@ class MegaSubPanel {
     this.panelLink.addEventListener('focus', this.linkFocus.bind(this));
     this.panelLink.addEventListener('blur', this.linkBlur.bind(this));
     this.panelLink.addEventListener('click', this.linkClick.bind(this));
-    this.uuid = this.uuidv4();
+    this.panelLink.addEventListener('keydown', this.linkKeyDown.bind(this));
+    this.panelUUID = this.uuidv4();
+    this.linkUUID = this.uuidv4();
     this.isSelected = false;
     let linkBlock = this.panelLink.getBoundingClientRect();
-    console.log(linkBlock)
-    this.panel.style.left = (linkBlock.left + linkBlock.width/2)+"px";
-    this.panel.style.top = (linkBlock.top + linkBlock.height*.8)+"px";
+    this.panel.style.left = (linkBlock.left + linkBlock.width / 2) + "px";
+    this.panel.style.top = (linkBlock.top + linkBlock.height * .8) + "px";
+    //link has id, role=button, aria-controls --> panel UUID, aria-expanded tab-index
 
+    this.panelLink.setAttribute('role', 'button');
+    this.panelLink.setAttribute('id', this.linkUUID);
+    this.panelLink.setAttribute('aria-controls', this.panelUUID);
+    this.panelLink.setAttribute('aria-expanded', 'false');
+    this.panelLink.setAttribute('tab-index', '0');
+
+    this.panel.setAttribute('role', 'region');
+    this.panel.setAttribute('id', this.panelUUID);
+    this.panel.setAttribute('aria-hidden', 'true');
+    this.panel.setAttribute('aria-expanded', 'false');
+    this.panel.setAttribute('aria-labeled-by', this.linkUUID);
+    this.panel.setAttribute('tab-index', '0');
+    this.panel.addEventListener('focusout', this.panelOut.bind(this));
+    this.tabCollection = new Tabbable(this.panel, {includeHidden: true});
+    this.isLast = false;
+
+    //panel id, role=region aria-expanded aria-hidden aria-labeled-by --> back to link
+
+  }
+  setAsLast(b) {
+    this.isLast = b;
+  }
+  panelOut(ev) {
+    let me = this;
+    if (this.isLast === true) {
+      this.tabCollection.tabbableNodes.forEach((tNode, idx) => {
+        let isTheSame = tNode.isEqualNode(ev.srcElement);
+      //  console.log(`${idx} ${isTheSame} src ${ev.srcElement} tabNode ${tNode} `)
+      //you are on the last menu
+      //and just tabbed off the last tabbable item onto the main page
+      
+        if (idx === me.tabCollection.tabbableNodes.length -1 && 
+              isTheSame === true) {
+          me.menuParent.resetPanels();
+        }
+
+      })
+    }
+    // console.log(`panel focus out isLast ${this.isLast} src ${ ev.srcElement}`);
+    // console.log(ev)
   }
   displayMenu(show) {
     let status = 'none';
     if (show) {
-      status = 'block'
+      status = 'block';
+      this.panel.setAttribute('aria-hidden', 'false');
+      this.panel.setAttribute('aria-expanded', 'true');
+      this.panelLink.setAttribute('aria-expanded', 'true');
+    } else {
+      this.panel.setAttribute('aria-hidden', 'true');
+      this.panel.setAttribute('aria-expanded', 'false');
+      this.panelLink.setAttribute('aria-expanded', 'false');
     }
     this.panel.style.display = status;
+
   }
   uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -151,25 +239,42 @@ class MegaSubPanel {
   }
   linkBlur(ev) {
     //check to see if you are losing focus and are the last member of the list
-    if (this.menuParent.subPanels[this.menuParent.subPanels.length-1].uuid 
-          === this.uuid) {
-      this.displayMenu(false)
-    }
+    // if (this.menuParent.subPanels[this.menuParent.subPanels.length-1].panelUUID
+    //       === this.panelUUID) {
+    //   this.displayMenu(false)
+    // }
+    this.isSelected = false;
 
   }
   linkFocus(ev) {
-   // console.log("focus " + this.uuid);
+    // console.log("focus " + this.panelUUID);
     this.isSelected = true;
-    this.menuParent.updateMenuPanels(this.uuid);
+    this.menuParent.updateMenuPanels(this.panelUUID);
+    // this.menuParent.resetPanels();
     // this.panel.style.display = 'block'
 
 
+  }
+  linkKeyDown(ev) {
+  //  console.log(`keyboard ${ev.keyCode}   `)
+
+    switch (event.keyCode) {
+      case Keyboard.ESCAPE:
+        this.displayMenu(false);
+        break;
+      case Keyboard.DOWN:
+      case Keyboard.SPACE:
+        this.displayMenu(true);
+        break;
+      default:
+      // code block
+    }
   }
   linkClick(ev) {
 
     ev.preventDefault();
     ev.stopPropagation();
-    console.log("click " + this.uuid);
+    console.log("click " + this.panelUUID);
 
   }
 }
