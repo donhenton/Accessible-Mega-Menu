@@ -10,7 +10,7 @@ const   stdDefaults = {
   hoverClass: "hover", // default css class for the hover state
   focusClass: "focus", // default css class for the focus state
   openClass: "open", // default css class for the open state,
-  toggleButtonClass: "accessible-megamenu-toggle", // default css class responsive toggle button
+  allowMainLinkNav: false, // if true top nav click will navigate to location, false will only open dropdown
   openDelay: 0, // default open delay when opening menu via mouseover
   closeDelay: 250, // default open delay when opening menu via mouseover
   openOnMouseover: false // default setting for whether menu should open on mouseover
@@ -93,10 +93,13 @@ class MegaMenu {
     this.defaults = {...stdDefaults, ...defs};
     this.menu = menu;
     this.menu.addEventListener('keydown', this.menuKeyDown.bind(this));
-    document.body.addEventListener('click', this.bodyClear.bind(this));
+    document.body.addEventListener('click', this.bodyClick.bind(this));
+    document.body.addEventListener('keydown', this.bodyKeyDown.bind(this));
+    
     this.selectedMenuId;
     this.lastMenuId;
     this.inMenu = false;
+    this.isClick = false;
     if (!Array.from(menu.classList).includes(this.defaults.menuClass)) {
 
       throw new Error("must submit the ul with the css class of defaults.menuClass")
@@ -111,10 +114,21 @@ class MegaMenu {
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
 
   }
-  bodyClear(ev) {
+  menuMouseOut(ev) {
+    console.log('menu out')
+    this.resetPanels();
+  }
+  
+  bodyClick(ev) {
+    console.log("body click")
     this.resetPanels();
     this.inMenu = true;
+    this.isClick = true;
 
+  }
+  bodyKeyDown(ev) {
+    console.log("keydown body")
+    this.isClick = false;
   }
   resetPanels() {
     this.inMenu = false;
@@ -151,6 +165,7 @@ class MegaMenu {
 
 class MegaSubPanel {
   constructor(topNav, menuParent) {
+    this.openOnMouseover = menuParent.defaults.openOnMouseover;
     this.topNav = topNav;
     this.menuParent = menuParent;
     this.panelLink = topNav.querySelector('a');
@@ -158,7 +173,8 @@ class MegaSubPanel {
     this.panelLink.addEventListener('focus', this.linkFocus.bind(this));
     this.panelLink.addEventListener('blur', this.linkBlur.bind(this));
     this.panelLink.addEventListener('click', this.linkClick.bind(this));
-
+    this.panelLink.addEventListener('keydown', this.linkKeyDown.bind(this));
+    
     this.panelUUID = this.uuidv4();
     this.linkUUID = this.uuidv4();
     this.isSelected = false;
@@ -228,10 +244,14 @@ class MegaSubPanel {
       this.panel.setAttribute('aria-hidden', 'false');
       this.panel.setAttribute('aria-expanded', 'true');
       this.panelLink.setAttribute('aria-expanded', 'true');
+      this.panelLink.classList.add(this.menuParent.defaults.focusClass);
+      this.panel.classList.add(this.menuParent.defaults.openClass);
     } else {
       this.panel.setAttribute('aria-hidden', 'true');
       this.panel.setAttribute('aria-expanded', 'false');
       this.panelLink.setAttribute('aria-expanded', 'false');
+      this.panelLink.classList.remove(this.menuParent.defaults.focusClass);
+      this.panel.classList.remove(this.menuParent.defaults.openClass);
     }
     this.panel.style.display = status;
 
@@ -243,25 +263,42 @@ class MegaSubPanel {
     });
   }
   linkBlur(ev) {
-   
+    // console.log("link blur")
     this.isSelected = false;
 
   }
-  linkFocus(ev) {
-    // console.log("focus " + this.panelUUID);
-    this.isSelected = true;
+  linkMouseOver(ev) {
+    console.log('link hover')
     this.menuParent.updateMenuPanels(this.panelUUID);
-    // this.menuParent.resetPanels();
-    // this.panel.style.display = 'block'
+  }
+  
+  linkKeyDown(ev) {
+    //console.log(`link keydown ${ev.keyCode}`)
+  }
+  linkFocus(ev) {
 
+    let me = this;
+    window.setTimeout(() => {
+      console.log("focus " + this.panelUUID);
+      if (me.menuParent.isClick === true
+            && this.menuParent.defaults.allowMainLinkNav) {
+        return;
+      }
+      me.isSelected = true;
+      me.menuParent.updateMenuPanels(this.panelUUID);
+    }, 200)
 
   }
- 
   linkClick(ev) {
-
-    ev.preventDefault();
-    ev.stopPropagation();
     console.log("click " + this.panelUUID);
+    if (!this.menuParent.defaults.allowMainLinkNav) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+    }
+
+
+
 
   }
 }
