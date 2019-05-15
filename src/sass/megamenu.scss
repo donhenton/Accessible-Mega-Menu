@@ -1,26 +1,12 @@
 /* from megamenu */
 .accessible-megamenu {
 
-    position: relative;
-
-    .skip-to-content-link {
-        position:absolute;
-        display: block;
-        height: 0px;
-        top: -10px;
-        left: -10px;
-        font-size: 12px;
-        background-color: transparent;
-        color: transparent;
-
-        &:focus {
-            height:40px;   
-            padding: 10px;
-            background-color: #225FD7;
-            color: #dedede;
-        }
-
+   
+    label {
+        display: none;
     }
+
+   
 
     /* a top level navigation item in the mega menu */
     .accessible-megamenu-top-nav-item {
@@ -113,3 +99,22 @@
 
 }
 
+ .skip-to-content-link {
+        position:absolute;
+        display: block;
+        //height: 0px;
+         top: -0px;
+       // left: -10px;
+        font-size: 12px;
+       // background-color: transparent;
+       // color: transparent;
+       z-index:20;
+
+        &:focus {
+            height:40px;   
+            padding: 10px;
+            background-color: #225FD7;
+            color: #dedede;
+        }
+
+    }

@@ -114,10 +114,14 @@ class MegaMenu {
     this.lastMenuId = this.subPanels[this.subPanels.length - 1].uuid;
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
     this.skipLink = document.querySelector('#skipLink');
-    this.skipLink.addEventListener('focus', this.skipFocus.bind(this));
+    if (this.skipLink) {
+      
+      this.skipLink.addEventListener('focus', this.skipFocus.bind(this));
     this.skipLink.addEventListener('click', this.skipClick.bind(this));
     this.skipLink.addEventListener('keydown', this.skipKeyDown.bind(this));
     this.skipTargetSelector = this.skipLink.getAttribute('data-skip-target-selector');
+    }
+    
     
 
   }
