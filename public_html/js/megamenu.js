@@ -292,7 +292,7 @@ class MegaSubPanel {
       }
       me.isSelected = true;
       me.menuParent.updateMenuPanels(this.panelUUID);
-    }, 200)
+    }, 50)
 
   }
   linkClick(ev) {
