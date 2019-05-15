@@ -1,6 +1,4 @@
 
-
-
 const   stdDefaults = {
   uuidPrefix: "megamenu", // unique ID's are required to indicate aria-owns, aria-controls and aria-labelledby
   menuClass: "accessible-megamenu", // default css class used to define the megamenu styling, on the ul of the menu
@@ -115,8 +113,39 @@ class MegaMenu {
           });
     this.lastMenuId = this.subPanels[this.subPanels.length - 1].uuid;
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
+    this.skipLink = document.querySelector('#skipLink');
+    this.skipLink.addEventListener('focus', this.skipFocus.bind(this));
+    this.skipLink.addEventListener('click', this.skipClick.bind(this));
+    this.skipLink.addEventListener('keydown', this.skipKeyDown.bind(this));
+    this.skipTargetSelector = this.skipLink.getAttribute('data-skip-target-selector');
+    console.log(this.skipLink)
 
   }
+  
+  skipKeyDown(ev) {
+     let tgt = document.querySelector(this.skipTargetSelector);
+     if (ev.keyCode === Keyboard.SPACE || 
+           ev.keyCode === Keyboard.ENTER) {
+       tgt.focus();
+     }
+    
+  }
+  
+  
+  skipClick(ev) {
+    let tgt = document.querySelector(this.skipTargetSelector);
+    tgt.focus();
+    
+  }
+  
+  
+  skipFocus(ev) {
+    if (this.selectedMenuId) {
+       this.resetPanels();
+     }
+  }
+  
+  
   menuMouseOver(ev) {
      if (this.selectedMenuId) {
        this.resetPanels();
