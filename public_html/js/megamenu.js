@@ -118,7 +118,7 @@ class MegaMenu {
     this.skipLink.addEventListener('click', this.skipClick.bind(this));
     this.skipLink.addEventListener('keydown', this.skipKeyDown.bind(this));
     this.skipTargetSelector = this.skipLink.getAttribute('data-skip-target-selector');
-    console.log(this.skipLink)
+    
 
   }
   
@@ -154,7 +154,7 @@ class MegaMenu {
   }
   
   bodyClick(ev) {
-    console.log("body click")
+   // console.log("body click")
     this.resetPanels();
     this.inMenu = false;
     this.selectedMenuId = null;
@@ -162,7 +162,7 @@ class MegaMenu {
 
   }
   bodyKeyDown(ev) {
-    console.log("keydown body")
+  //  console.log("keydown body")
     this.isClick = false;
   }
   resetPanels() {
@@ -192,7 +192,7 @@ class MegaMenu {
     })
     if (!this.selectedMenuId && newSelectedId) {
       this.inMenu = true;
-      console.log("entering the menu");
+    //  console.log("entering the menu");
     }
     this.selectedMenuId = newSelectedId;
 
@@ -247,7 +247,7 @@ class MegaSubPanel {
     this.isLast = b;
   }
   panelKeyDown(ev) {
-    console.log(`panel Out ${ev.keyCode}`)
+   // console.log(`panel Out ${ev.keyCode}`)
     // console.log(ev)
     let me = this;
     if (ev.keyCode === Keyboard.ESCAPE) {
@@ -310,7 +310,7 @@ class MegaSubPanel {
    
   }
   linkMouseOver(ev) {
-    console.log('link hover')
+   // console.log('link hover')
     this.menuParent.updateMenuPanels(this.panelUUID);
   }
   
@@ -321,7 +321,7 @@ class MegaSubPanel {
 
     let me = this;
     window.setTimeout(() => {
-      console.log("focus " + this.panelUUID);
+     // console.log("focus " + this.panelUUID);
       if (me.menuParent.isClick === true
             && this.menuParent.defaults.allowMainLinkNav) {
         return;
@@ -332,7 +332,7 @@ class MegaSubPanel {
 
   }
   linkClick(ev) {
-    console.log("click " + this.panelUUID);
+  //  console.log("click " + this.panelUUID);
     if (!this.menuParent.defaults.allowMainLinkNav) {
       ev.preventDefault();
       ev.stopPropagation();
