@@ -95,8 +95,11 @@ class MegaMenu {
     this.menu.addEventListener('keydown', this.menuKeyDown.bind(this));
     document.body.addEventListener('click', this.bodyClick.bind(this));
     document.body.addEventListener('keydown', this.bodyKeyDown.bind(this));
-    
-    this.selectedMenuId;
+    if (this.defaults.openOnMouseover) {
+      this.menu.classList.add(this.defaults.hoverClass);
+      this.menu.addEventListener('mouseover', this.menuMouseOver.bind(this));
+    }
+    this.selectedMenuId;//used only for keyboard navigation
     this.lastMenuId;
     this.inMenu = false;
     this.isClick = false;
@@ -114,15 +117,18 @@ class MegaMenu {
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
 
   }
-  menuMouseOut(ev) {
-    console.log('menu out')
-    this.resetPanels();
+  menuMouseOver(ev) {
+     if (this.selectedMenuId) {
+       this.resetPanels();
+     }
+    
   }
   
   bodyClick(ev) {
     console.log("body click")
     this.resetPanels();
-    this.inMenu = true;
+    this.inMenu = false;
+    this.selectedMenuId = null;
     this.isClick = true;
 
   }
@@ -132,6 +138,7 @@ class MegaMenu {
   }
   resetPanels() {
     this.inMenu = false;
+    this.selectedMenuId = null;
     this.subPanels.forEach(p => {
 
       p.displayMenu(false);
@@ -271,7 +278,7 @@ class MegaSubPanel {
   linkBlur(ev) {
     // console.log("link blur")
     this.isSelected = false;
-
+   
   }
   linkMouseOver(ev) {
     console.log('link hover')
