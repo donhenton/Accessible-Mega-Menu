@@ -11,8 +11,8 @@ const   stdDefaults = {
   focusClass: "focus", // default css class for the focus state
   openClass: "open", // default css class for the open state,
   allowMainLinkNav: false, // if true top nav click will navigate to location, false will only open dropdown
-  openDelay: 0, // default open delay when opening menu via mouseover
-  closeDelay: 250, // default open delay when opening menu via mouseover
+ // openDelay: 0, // default open delay when opening menu via mouseover
+ // closeDelay: 250, // default open delay when opening menu via mouseover
   openOnMouseover: false // default setting for whether menu should open on mouseover
 };
 const   Keyboard = {
@@ -168,6 +168,9 @@ class MegaSubPanel {
     this.openOnMouseover = menuParent.defaults.openOnMouseover;
     this.topNav = topNav;
     this.menuParent = menuParent;
+    if (menuParent.defaults.openOnMouseover) {
+      this.topNav.classList.add(menuParent.defaults.hoverClass);
+    }
     this.panelLink = topNav.querySelector('a');
     this.panel = topNav.querySelector("." + menuParent.defaults.panelClass);
     this.panelLink.addEventListener('focus', this.linkFocus.bind(this));
@@ -238,7 +241,7 @@ class MegaSubPanel {
     // console.log(ev)
   }
   displayMenu(show) {
-    let status = 'none';
+   // let status = 'none';
     if (show) {
       status = 'block';
       this.panel.setAttribute('aria-hidden', 'false');
@@ -253,7 +256,10 @@ class MegaSubPanel {
       this.panelLink.classList.remove(this.menuParent.defaults.focusClass);
       this.panel.classList.remove(this.menuParent.defaults.openClass);
     }
-    this.panel.style.display = status;
+    //if (!this.menuParent.defaults.openOnMouseover) {
+    ///   this.panel.style.display = status;
+   /// }
+   
 
   }
   uuidv4() {

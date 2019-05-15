@@ -7,9 +7,14 @@
         list-style: none;
         display: inline-block;
         padding: 10px;
-        margin: 1opx;
+        margin: 10px;
 
-
+        //THIS MUST BE PRESENT FOR THE MENU TO WORK!!!
+        &.hover:hover {
+             .accessible-megamenu-panel {  
+               display: block;
+            }
+        }
 
 
         /* first descendant link within a top level navigation item */
@@ -29,9 +34,11 @@
                 navigation item */
             &:focus,
                 &.open {
-                  //border: 1px solid #37ffc4;
+                //border: 1px solid #37ffc4;
 
             }
+
+
 
 
             /* open state of first descendant link within a top level
@@ -55,8 +62,8 @@
     .accessible-megamenu-panel {
         position: absolute;
         display: none; //set to hide first time
-       // top: 80px;
-        
+        // top: 80px;
+
         // left: 20px;
         //margin-top: -1px;
         padding: 0.5em 1em;
@@ -73,6 +80,7 @@
 
 
         /* accessible-megamenu-paneligation panel open state */
+        //THIS MUST BE PRESENT FOR THE MENU TO WORK!!!
         &.open {
             display: block;
         }
@@ -83,22 +91,6 @@
     }
 
 
-
-
-    /*     list of items within accessible-megamenu-paneligation panel 
-        .accessible-megamenu-panel ul {
-            display: inline-block;
-            vertical-align: top;
-            margin: 0 1em 0 0;
-            padding: 0;
-        }
-    
-         list item within accessible-megamenu-paneligation panel 
-        .accessible-megamenu-panel li {
-            display: block;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }*/
+ 
 
 }
