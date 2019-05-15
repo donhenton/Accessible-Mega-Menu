@@ -31,7 +31,6 @@ const   Keyboard = {
   RIGHT: 39,
   SPACE: 32,
   TAB: 9,
-  SHIFT_TAB: 999,
   UP: 38,
   keyMap: {
     48: "0",
@@ -93,9 +92,7 @@ class MegaMenu {
 
     this.defaults = {...stdDefaults, ...defs};
     this.menu = menu;
-    // this.menu.addEventListener('focusout', this.focusOut.bind(this));
-    this.menu.addEventListener('blur', this.blurFunction.bind(this));
-    this.menu.addEventListener('focus', this.linkFunction.bind(this));
+    this.menu.addEventListener('keydown', this.menuKeyDown.bind(this));
     document.body.addEventListener('click', this.bodyClear.bind(this));
     this.selectedMenuId;
     this.lastMenuId;
@@ -116,18 +113,11 @@ class MegaMenu {
   }
   bodyClear(ev) {
     this.resetPanels();
+    this.inMenu = true;
 
   }
-  linkFunction(ev) {
-    console.log('menu focus')
-  }
-  blurFunction(ev) {
-    console.log('blur menu')
-  }
-//  focusOut(ev) {
-//    console.log('mega menu focusout')
-//  }
   resetPanels() {
+    this.inMenu = false;
     this.subPanels.forEach(p => {
 
       p.displayMenu(false);
@@ -135,11 +125,12 @@ class MegaMenu {
     })
 
   }
-//    
-//  
-
-
-
+  menuKeyDown(ev) {
+    if (ev.keyCode === Keyboard.ESCAPE) {
+      this.resetPanels();
+      ev.stopPropagation();
+    }
+  }
   updateMenuPanels(newSelectedId) {
     this.subPanels.forEach(p => {
       if (p.panelUUID === newSelectedId) {
@@ -179,6 +170,7 @@ class MegaSubPanel {
     this.panelLink.setAttribute('role', 'button');
     this.panelLink.setAttribute('id', this.linkUUID);
     this.panelLink.setAttribute('aria-controls', this.panelUUID);
+    this.panelLink.setAttribute('aria-owns', this.panelUUID);
     this.panelLink.setAttribute('aria-expanded', 'false');
     this.panelLink.setAttribute('tab-index', '0');
 
@@ -186,23 +178,28 @@ class MegaSubPanel {
     this.panel.setAttribute('id', this.panelUUID);
     this.panel.setAttribute('aria-hidden', 'true');
     this.panel.setAttribute('aria-expanded', 'false');
-    this.panel.setAttribute('aria-labeled-by', this.linkUUID);
+    this.panel.setAttribute('aria-labelledby', this.linkUUID);
     this.panel.setAttribute('tab-index', '0');
     // this.panel.addEventListener('focusout', this.panelOut.bind(this));
     this.panel.addEventListener('keydown', this.panelKeyDown.bind(this));
     this.tabCollection = new Tabbable(this.panel, {includeHidden: true});
     this.isLast = false;
 
-    //panel id, role=region aria-expanded aria-hidden aria-labeled-by --> back to link
+    //panel id, role=region aria-expanded aria-hidden aria-labelledby --> back to link
 
   }
   setAsLast(b) {
     this.isLast = b;
   }
   panelKeyDown(ev) {
-   // console.log(`panel Out ${ev.keyCode}`)
-   // console.log(ev)
+    console.log(`panel Out ${ev.keyCode}`)
+    // console.log(ev)
     let me = this;
+    if (ev.keyCode === Keyboard.ESCAPE) {
+      me.menuParent.resetPanels();
+      return;
+    }
+
 
     if (this.isLast === true) {
       this.tabCollection.tabbableNodes.forEach((tNode, idx) => {
@@ -246,11 +243,7 @@ class MegaSubPanel {
     });
   }
   linkBlur(ev) {
-    //check to see if you are losing focus and are the last member of the list
-    // if (this.menuParent.subPanels[this.menuParent.subPanels.length-1].panelUUID
-    //       === this.panelUUID) {
-    //   this.displayMenu(false)
-    // }
+   
     this.isSelected = false;
 
   }
@@ -263,21 +256,7 @@ class MegaSubPanel {
 
 
   }
-//  linkKeyDown(ev) {
-//       console.log(`keyboard ${ev.keyCode}   `)
-//
-//    switch (event.keyCode) {
-//      case Keyboard.ESCAPE:
-//        this.displayMenu(false);
-//        break;
-//      case Keyboard.DOWN:
-//      case Keyboard.SPACE:
-//        this.displayMenu(true);
-//        break;
-//      default:
-//      // code block
-//    }
-//  }
+ 
   linkClick(ev) {
 
     ev.preventDefault();

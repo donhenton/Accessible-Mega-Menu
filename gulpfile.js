@@ -58,6 +58,7 @@ gulp.task('serve', ['compile-sass'], function() {
 
 gulp.task('init-dev',[ 'compile-sass']);
 gulp.task('dev', ['serve']);
+gulp.task('default', ['serve']);
 
 /* end frontend task ---------------------------------------- */
 
