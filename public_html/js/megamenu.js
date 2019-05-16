@@ -9,8 +9,9 @@ const   stdDefaults = {
   focusClass: "focus", // default css class for the focus state
   openClass: "open", // default css class for the open state,
   allowMainLinkNav: false, // if true top nav click will navigate to location, false will only open dropdown
- // openDelay: 0, // default open delay when opening menu via mouseover
- // closeDelay: 250, // default open delay when opening menu via mouseover
+  contentStart: "#skip-to-content", //css selector that represents the start of content, ie where to go when the menu exits by tab
+  // openDelay: 0, // default open delay when opening menu via mouseover
+  // closeDelay: 250, // default open delay when opening menu via mouseover
   openOnMouseover: false // default setting for whether menu should open on mouseover
 };
 const   Keyboard = {
@@ -115,50 +116,40 @@ class MegaMenu {
     this.subPanels[this.subPanels.length - 1].setAsLast(true);
     this.skipLink = document.querySelector('#skipLink');
     if (this.skipLink) {
-      
+
       this.skipLink.addEventListener('focus', this.skipFocus.bind(this));
-    this.skipLink.addEventListener('click', this.skipClick.bind(this));
-    this.skipLink.addEventListener('keydown', this.skipKeyDown.bind(this));
-    this.skipTargetSelector = this.skipLink.getAttribute('data-skip-target-selector');
+      this.skipLink.addEventListener('click', this.skipClick.bind(this));
+      this.skipLink.addEventListener('keydown', this.skipKeyDown.bind(this));
+      this.skipTargetSelector = this.skipLink.getAttribute('data-skip-target-selector');
     }
-    
-    
 
   }
-  
   skipKeyDown(ev) {
-     let tgt = document.querySelector(this.skipTargetSelector);
-     if (ev.keyCode === Keyboard.SPACE || 
-           ev.keyCode === Keyboard.ENTER) {
-       tgt.focus();
-     }
-    
+    let tgt = document.querySelector(this.skipTargetSelector);
+    if (ev.keyCode === Keyboard.SPACE ||
+          ev.keyCode === Keyboard.ENTER) {
+      tgt.focus();
+    }
+
   }
-  
-  
   skipClick(ev) {
     let tgt = document.querySelector(this.skipTargetSelector);
     tgt.focus();
-    
+
   }
-  
-  
   skipFocus(ev) {
     if (this.selectedMenuId) {
-       this.resetPanels();
-     }
+      this.resetPanels();
+    }
   }
-  
-  
   menuMouseOver(ev) {
-     if (this.selectedMenuId) {
-       this.resetPanels();
-     }
-    
+    if (this.selectedMenuId) {
+      this.resetPanels();
+    }
+
   }
-  
   bodyClick(ev) {
-   // console.log("body click")
+    // console.log("body click")
     this.resetPanels();
     this.inMenu = false;
     this.selectedMenuId = null;
@@ -166,7 +157,7 @@ class MegaMenu {
 
   }
   bodyKeyDown(ev) {
-  //  console.log("keydown body")
+    //  console.log("keydown body")
     this.isClick = false;
   }
   resetPanels() {
@@ -196,7 +187,7 @@ class MegaMenu {
     })
     if (!this.selectedMenuId && newSelectedId) {
       this.inMenu = true;
-    //  console.log("entering the menu");
+      //  console.log("entering the menu");
     }
     this.selectedMenuId = newSelectedId;
 
@@ -217,7 +208,7 @@ class MegaSubPanel {
     this.panelLink.addEventListener('blur', this.linkBlur.bind(this));
     this.panelLink.addEventListener('click', this.linkClick.bind(this));
     this.panelLink.addEventListener('keydown', this.linkKeyDown.bind(this));
-    
+
     this.panelUUID = this.uuidv4();
     this.linkUUID = this.uuidv4();
     this.isSelected = false;
@@ -241,17 +232,30 @@ class MegaSubPanel {
     this.panel.setAttribute('tab-index', '0');
     // this.panel.addEventListener('focusout', this.panelOut.bind(this));
     this.panel.addEventListener('keydown', this.panelKeyDown.bind(this));
-    this.tabCollection = new Tabbable(this.panel, {includeHidden: true});
+    this.endTab;
     this.isLast = false;
 
     //panel id, role=region aria-expanded aria-hidden aria-labelledby --> back to link
 
   }
   setAsLast(b) {
+    let me = this;
     this.isLast = b;
+    this.endTab = document.createElement('div');
+    this.endTab.setAttribute('tabindex', 0);
+    this.endTab.classList.add('end-marker');
+    this.panel.insertAdjacentElement('beforeEnd', this.endTab);;
+    this.endTab.addEventListener('focus', (ev) => {
+      me.menuParent.resetPanels();
+      let start = document.querySelector(me.menuParent.defaults.contentStart);
+      if (start) {
+        start.focus();
+      }
+      
+    });
   }
   panelKeyDown(ev) {
-   // console.log(`panel Out ${ev.keyCode}`)
+    // console.log(`panel Out ${ev.keyCode}`)
     // console.log(ev)
     let me = this;
     if (ev.keyCode === Keyboard.ESCAPE) {
@@ -259,29 +263,9 @@ class MegaSubPanel {
       return;
     }
 
-
-    if (this.isLast === true) {
-      this.tabCollection.tabbableNodes.forEach((tNode, idx) => {
-        let isTheSame = tNode.isEqualNode(ev.srcElement);
-        //  console.log(`${idx} ${isTheSame} src ${ev.srcElement} tabNode ${tNode} `)
-        //you are on the last menu
-        //and just tabbed off the last tabbable item onto the main page
-        //assuming you are moving off with the tab key
-        //skip below if the key press is SHIFT TAB
-
-        if (idx === me.tabCollection.tabbableNodes.length - 1 &&
-              isTheSame === true && ev.keyCode === Keyboard.TAB
-              && ev.shiftKey === false) {
-          me.menuParent.resetPanels();
-        }
-
-      })
-    }
-    // console.log(`panel focus out isLast ${this.isLast} src ${ ev.srcElement}`);
-    // console.log(ev)
   }
   displayMenu(show) {
-   // let status = 'none';
+    // let status = 'none';
     if (show) {
       status = 'block';
       this.panel.setAttribute('aria-hidden', 'false');
@@ -296,10 +280,6 @@ class MegaSubPanel {
       this.panelLink.classList.remove(this.menuParent.defaults.focusClass);
       this.panel.classList.remove(this.menuParent.defaults.openClass);
     }
-    //if (!this.menuParent.defaults.openOnMouseover) {
-    ///   this.panel.style.display = status;
-   /// }
-   
 
   }
   uuidv4() {
@@ -311,13 +291,12 @@ class MegaSubPanel {
   linkBlur(ev) {
     // console.log("link blur")
     this.isSelected = false;
-   
+
   }
   linkMouseOver(ev) {
-   // console.log('link hover')
+    // console.log('link hover')
     this.menuParent.updateMenuPanels(this.panelUUID);
   }
-  
   linkKeyDown(ev) {
     //console.log(`link keydown ${ev.keyCode}`)
   }
@@ -325,7 +304,7 @@ class MegaSubPanel {
 
     let me = this;
     window.setTimeout(() => {
-     // console.log("focus " + this.panelUUID);
+      // console.log("focus " + this.panelUUID);
       if (me.menuParent.isClick === true
             && this.menuParent.defaults.allowMainLinkNav) {
         return;
@@ -336,7 +315,7 @@ class MegaSubPanel {
 
   }
   linkClick(ev) {
-  //  console.log("click " + this.panelUUID);
+    //  console.log("click " + this.panelUUID);
     if (!this.menuParent.defaults.allowMainLinkNav) {
       ev.preventDefault();
       ev.stopPropagation();
