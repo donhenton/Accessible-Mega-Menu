@@ -204,7 +204,7 @@ class MegaMenu {
     if (newIdx < 0) {
       newIdx = this.subPanels.length - 1;
     }
-    if (!newIdx !== this.selectedMenuIdx) {
+    if (newIdx !== this.selectedMenuIdx) {
       this.selectedMenuIdx = newIdx;
       this.updateMenuPanels(this.subPanels[newIdx].panelUUID);
 
