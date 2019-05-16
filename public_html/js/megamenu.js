@@ -182,15 +182,15 @@ class MegaMenu {
         this.resetPanels();
         ev.stopPropagation();
         break;
-      
+
       case Keyboard.RIGHT:
         this.advanceMenu(1);
         break;
-      
+
       case Keyboard.LEFT:
         this.advanceMenu(-1);
         break;
-        
+
 
     }
 
@@ -198,26 +198,22 @@ class MegaMenu {
 
 
   }
-  
   advanceMenu(amt) {
-    let newIdx = (this.selectedMenuIdx + amt ) % this.subPanels.length;
-  //  console.log(`newIdx ${newIdx}`)
+    let newIdx = (this.selectedMenuIdx + amt) % this.subPanels.length;
+    //  console.log(`newIdx ${newIdx}`)
     if (newIdx < 0) {
-      newIdx = this.subPanels.length-1;
+      newIdx = this.subPanels.length - 1;
     }
     if (!newIdx !== this.selectedMenuIdx) {
-      this.selectedMenuIdx = newIdx;  
+      this.selectedMenuIdx = newIdx;
       this.updateMenuPanels(this.subPanels[newIdx].panelUUID);
-      
+
     }
-    
+
   }
-  
-  
-  
   updateMenuPanels(newSelectedId) {
-    this.subPanels.forEach((p,idx) => {
-     //  console.log(`idx ${idx} `)
+    this.subPanels.forEach((p, idx) => {
+      //  console.log(`idx ${idx} `)
       if (p.panelUUID === newSelectedId) {
         this.selectedMenuIdx = idx;
         p.displayMenu(true);
@@ -228,9 +224,9 @@ class MegaMenu {
     })
     if (!this.selectedMenuIdx && newSelectedId) {
       this.inMenu = true;
-      
+
     }
-  
+
 
   }
 }
@@ -356,7 +352,7 @@ class MegaSubPanel {
         me.isSelected = true;
         me.menuParent.updateMenuPanels(this.panelUUID);
       }, 50)
-      
+
     }
     me.isSelected = true;
     me.menuParent.updateMenuPanels(this.panelUUID);
