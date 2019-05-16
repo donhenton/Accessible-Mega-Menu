@@ -1,3 +1,4 @@
+// mac settings for accessibility: https://stackoverflow.com/questions/11704828/how-to-allow-keyboard-focus-of-links-in-firefox
 
 const   stdDefaults = {
   menuClass: "accessible-megamenu", // default css class used to define the megamenu styling, on the ul of the menu
@@ -87,16 +88,19 @@ const   Keyboard = {
 
 class MegaMenu {
   constructor(menu, defs) {
-
-    let me = this;
-    this.defaults = {};
-     Object.keys(stdDefaults).forEach(function (key) {
-          me.defaults[key] = stdDefaults[key];
-    });
-
-    Object.keys(defs).forEach(function (key) {
-          me.defaults[key] = defs[key];
-    });
+     let me = this;
+     this.defaults = {};
+   // this.defaults = { ...stdDefaults, ...defs};
+    Object.keys(stdDefaults).forEach(key => {
+      key => me.defaults[key] = stdDefaults[key];
+    })
+    
+     Object.keys(defs).forEach(key => {
+      key => me.defaults[key] = defs[key];
+    })
+    
+    
+    
     this.menu = menu;
     this.menu.addEventListener('keydown', this.menuKeyDown.bind(this));
     document.body.addEventListener('click', this.bodyClick.bind(this));
@@ -113,7 +117,7 @@ class MegaMenu {
 
       throw new Error("must submit the ul with the css class of defaults.menuClass")
     }
-     
+   
     this.subPanels = [];
     Array.from(this.menu.querySelectorAll("." + this.defaults.topNavItemClass))
           .forEach(topNav => {
@@ -156,7 +160,7 @@ class MegaMenu {
 
   }
   bodyClick(ev) {
-    // console.log("body click")
+    console.log("body click")
     this.resetPanels();
     this.inMenu = false;
     this.selectedMenuIdx = null;
@@ -304,8 +308,8 @@ class MegaSubPanel {
     });
   }
   panelKeyDown(ev) {
-    // console.log(`panel Out ${ev.keyCode}`)
-    // console.log(ev)
+    console.log(`panel Out ${ev.keyCode}`)
+    console.log(ev)
     let me = this;
     if (ev.keyCode === Keyboard.ESCAPE) {
       me.menuParent.resetPanels();
@@ -339,16 +343,16 @@ class MegaSubPanel {
     });
   }
   linkBlur(ev) {
-    // console.log("link blur")
+    console.log("link blur")
     this.isSelected = false;
 
   }
   linkMouseOver(ev) {
-    // console.log('link hover')
+    console.log('link hover')
     this.menuParent.updateMenuPanels(this.panelUUID);
   }
   linkKeyDown(ev) {
-    //console.log(`link keydown ${ev.keyCode}`)
+    console.log(`link keydown ${ev.keyCode}`)
   }
   linkFocus(ev) {
 
@@ -356,7 +360,7 @@ class MegaSubPanel {
     if (this.menuParent.defaults.allowMainLinkNav) {
 
       window.setTimeout(() => {
-        // console.log("focus " + this.panelUUID);
+        console.log("focus " + this.panelUUID);
         if (me.menuParent.isClick === true) {
           return;
         }

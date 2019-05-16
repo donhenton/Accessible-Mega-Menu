@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>ES6 Mega Menu</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/main.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+
+        <a  id="skipLink" tabindex="1" href="" class="skip-to-content-link" data-skip-target-selector="#skip-to-content">Skip To Content</a>  
+
+
+        <nav class="nav-demo" tabindex="0" role="navigation">
+            <ul  class="accessible-megamenu">
+
+                <li class="accessible-megamenu-top-nav-item">
+                    <label id="movieDescription">Movies Menu Item</label>
+                    <a aria-labelledby="movieDescription" href="?movie">Movies</a>
+                    <div class="accessible-megamenu-panel">
+                        <ul class="demo-menu-subgroup">
+                            <li><a href="?movie&genre=0">Action & Adventure 0</a></li>
+                            <li><a href="?movie&genre=2">Children & Family 2</a></li>
+                            <li><a href="?movie&genre=7">Dramas 7</a></li>
+                            <li><a href="?movie&genre=9">Foreign 9 </a></li>
+                            <li><a href="?movie&genre=14">Musicals 14</a></li>
+                            <li><a href="?movie&genre=15">Romance 15</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="accessible-megamenu-top-nav-item">
+                    <label id="tvDescription">TV Shows Menu Item</label>
+                    <a aria-labelledby="tvDescription" href="?tv">TV Shows</a>
+
+                    <div class="accessible-megamenu-panel">
+                        <ul class="demo-menu-subgroup">
+                            <li><a href="?tv&genre=20">Classic TV</a></li>
+                            <li><a href="?tv&genre=21">Crime TV</a></li>
+                            <li><a href="?tv&genre=27">Reality TV</a></li>
+                            <li><a href="?tv&genre=30">TV Action</a></li>
+                            <li><a href="?tv&genre=33">TV Dramas</a></li>
+                            <li><a href="?tv&genre=34">TV Horror</a></li>
+
+                        </ul>
+                    </div>
+                </li>   
+
+                <li class="accessible-megamenu-top-nav-item">
+                    <label id="tvDescription">Bingeable T Menu Item</label>
+                    <a aria-labelledby="bingableDescription" href="?binge">Bingeable TV</a>
+
+                    <div class="accessible-megamenu-panel">
+
+                        <div class="demo-menu-block">
+
+                            Now, when I say that I am in the habit of going to sea whenever 
+                            I begin to grow hazy about the eyes, and begin to be over conscious of my lungs, 
+                            I do not mean to have it inferred that I ever go to sea as a passenger.
+
+
+                        </div>
+
+
+                        <ul class="demo-menu-subgroup">
+                            <li><a href="?tv&genre=20">British BBC Series</a></li>
+                            <li><a href="?tv&genre=21">Prime Video Releases</a></li>
+                            <li><a href="?tv&genre=27">Ru Paul Stock Market Reports</a></li>
+                            <li><a href="?tv&genre=30">Morbid Swedish Murder Dramas</a></li>
+                        </ul>
+
+
+
+
+
+                    </div>
+                </li>   
+
+            </ul>
+
+        </nav>
+
+        <section class="main">
+            <h2>Main Body of the Site</h2>
+
+            <p class="row">
+                Content goes here <a id="skip-to-content" href="#">First Link</a>
+            </p>
+            <p class="row">
+                But look! here come more crowds, pacing straight for the water, and seemingly bound for a dive. Strange! Nothing will content them but the extremest limit of the land; loitering under the shady lee of yonder warehouses will not suffice. No. They must get just as nigh the water as they possibly can without falling in. And there they stand—miles of them—leagues. Inlanders all, they come from lanes and alleys, streets and avenues—north, east, south, and west. Yet here they all unite. Tell me, does the magnetic virtue of the needles of the compasses of all those ships attract them thither?
+            </p>
+        </section>
+        <script src="js/ie/out/ie_polyfills.js" type="text/javascript"></script>
+        <script src="js/ie/out/megamenu_ie.js" type="text/javascript"></script>
+        <script src="js/ie/out/main.js" type="text/javascript"></script>
+       
+    </body>
+</html>

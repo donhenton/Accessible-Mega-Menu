@@ -5,6 +5,9 @@ body {
 $menuColor: lightgray;
 $menuTextColor: black;
 
+*:focus {
+    border: 1px solid #eee      ;
+}
 .nav-demo {
     //display: flex;
     justify-content: space-around;
