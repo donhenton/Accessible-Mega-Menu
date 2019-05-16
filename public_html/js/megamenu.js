@@ -316,15 +316,21 @@ class MegaSubPanel {
   linkFocus(ev) {
 
     let me = this;
-    window.setTimeout(() => {
-      // console.log("focus " + this.panelUUID);
-      if (me.menuParent.isClick === true
-            && this.menuParent.defaults.allowMainLinkNav) {
-        return;
-      }
-      me.isSelected = true;
-      me.menuParent.updateMenuPanels(this.panelUUID);
-    }, 50)
+    if (this.menuParent.defaults.allowMainLinkNav) {
+
+      window.setTimeout(() => {
+        // console.log("focus " + this.panelUUID);
+        if (me.menuParent.isClick === true) {
+          return;
+        }
+        me.isSelected = true;
+        me.menuParent.updateMenuPanels(this.panelUUID);
+      }, 50)
+      
+    }
+    me.isSelected = true;
+    me.menuParent.updateMenuPanels(this.panelUUID);
+
 
   }
   linkClick(ev) {
