@@ -278,11 +278,14 @@ class MegaSubPanel {
   setAsLast(b) {
     let me = this;
     this.isLast = b;
+    //create a hidden element that will take focus and close the final
+    //menu and go to next focusable item on the page
+    
     this.endTab = document.createElement('div');
     this.endTab.setAttribute('tabindex', 0);
     this.endTab.classList.add('end-marker');
     this.panel.insertAdjacentElement('beforeEnd', this.endTab);
-    ;
+     
     this.endTab.addEventListener('focus', (ev) => {
       me.menuParent.resetPanels();
       let start = document.querySelector(me.menuParent.defaults.contentStart);
