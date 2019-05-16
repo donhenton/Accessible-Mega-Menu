@@ -1,6 +1,5 @@
 
 const   stdDefaults = {
-  uuidPrefix: "megamenu", // unique ID's are required to indicate aria-owns, aria-controls and aria-labelledby
   menuClass: "accessible-megamenu", // default css class used to define the megamenu styling, on the ul of the menu
   topNavItemClass: "accessible-megamenu-top-nav-item", // default css class for a top-level navigation item in the megamenu
   panelClass: "accessible-megamenu-panel", // default css class for a megamenu panel
@@ -171,10 +170,23 @@ class MegaMenu {
 
   }
   menuKeyDown(ev) {
-    if (ev.keyCode === Keyboard.ESCAPE) {
-      this.resetPanels();
-      ev.stopPropagation();
+
+    // if (ev.keyCode === Keyboard.ESCAPE) {
+    //   this.resetPanels();
+    ev.stopPropagation();
+    // }
+
+    switch (ev.keyCode) {
+
+      case Keyboard.ESCAPE:
+        this.resetPanels();
+        ev.stopPropagation();
+
     }
+
+
+
+
   }
   updateMenuPanels(newSelectedId) {
     this.subPanels.forEach(p => {
@@ -244,14 +256,15 @@ class MegaSubPanel {
     this.endTab = document.createElement('div');
     this.endTab.setAttribute('tabindex', 0);
     this.endTab.classList.add('end-marker');
-    this.panel.insertAdjacentElement('beforeEnd', this.endTab);;
+    this.panel.insertAdjacentElement('beforeEnd', this.endTab);
+    ;
     this.endTab.addEventListener('focus', (ev) => {
       me.menuParent.resetPanels();
       let start = document.querySelector(me.menuParent.defaults.contentStart);
       if (start) {
         start.focus();
       }
-      
+
     });
   }
   panelKeyDown(ev) {
