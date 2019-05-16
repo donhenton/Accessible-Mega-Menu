@@ -8,11 +8,11 @@
         <link href="css/main.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-         
-       
-        
-        <nav class="nav-demo" role="navigation">
-                   
+
+        <a  id="skipLink" tabindex="1" href="" class="skip-to-content-link" data-skip-target-selector="#skip-to-content">Skip To Content</a>  
+
+
+        <nav class="nav-demo" tabindex="0" role="navigation">
             <ul  class="accessible-megamenu">
 
                 <li class="accessible-megamenu-top-nav-item">
@@ -31,7 +31,9 @@
                 </li>
 
                 <li class="accessible-megamenu-top-nav-item">
-                    <a href="?tv">TV Shows</a>
+                    <label id="tvDescription">TV Shows Menu Item</label>
+                    <a aria-labelledby="tvDescription" href="?tv">TV Shows</a>
+
                     <div class="accessible-megamenu-panel">
                         <ul class="demo-menu-subgroup">
                             <li><a href="?tv&genre=20">Classic TV</a></li>
@@ -46,30 +48,32 @@
                 </li>   
 
                 <li class="accessible-megamenu-top-nav-item">
-                    <a href="?binge">Bingeable TV</a>
+                    <label id="tvDescription">Bingeable T Menu Item</label>
+                    <a aria-labelledby="bingableDescription" href="?binge">Bingeable TV</a>
+
                     <div class="accessible-megamenu-panel">
-                        
+
                         <div class="demo-menu-block">
-                            
+
                             Now, when I say that I am in the habit of going to sea whenever 
                             I begin to grow hazy about the eyes, and begin to be over conscious of my lungs, 
                             I do not mean to have it inferred that I ever go to sea as a passenger.
-                            
-                            
+
+
                         </div>
-                        
-                        
+
+
                         <ul class="demo-menu-subgroup">
                             <li><a href="?tv&genre=20">British BBC Series</a></li>
                             <li><a href="?tv&genre=21">Prime Video Releases</a></li>
                             <li><a href="?tv&genre=27">Ru Paul Stock Market Reports</a></li>
                             <li><a href="?tv&genre=30">Morbid Swedish Murder Dramas</a></li>
                         </ul>
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
                     </div>
                 </li>   
 
@@ -88,9 +92,9 @@
             </p>
         </section>
 
- <a  id="skipLink" href="" class="skip-to-content-link" data-skip-target-selector="#skip-to-content">Skip To Content</a>    
 
-       
+
+
         <script src="js/tabbable.js" type="text/javascript"></script>
         <script src="js/megamenu.js" type="text/javascript"></script>
         <script src="js/main.js" type="text/javascript"></script>

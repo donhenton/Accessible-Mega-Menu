@@ -1,18 +1,18 @@
 /* from megamenu */
 .accessible-megamenu {
 
-   
+
     label {
         display: none;
     }
 
-   
+
 
     /* a top level navigation item in the mega menu */
     .accessible-megamenu-top-nav-item {
         list-style: none;
         display: inline-block;
-   
+
         //THIS MUST BE PRESENT FOR THE MENU TO WORK!!!
         &.hover:hover {
             .accessible-megamenu-panel {  
@@ -99,22 +99,22 @@
 
 }
 
- .skip-to-content-link {
-        position:absolute;
-        display: block;
-        //height: 0px;
-         top: -0px;
-       // left: -10px;
-        font-size: 12px;
-       // background-color: transparent;
-       // color: transparent;
-       z-index:20;
+.skip-to-content-link {
+    position:absolute;
+    display: block;
+    //height: 0px;
+    top: -0px;
+    // left: -10px;
+    font-size: 12px;
+    background-color: transparent;
+    color: transparent;
+    z-index:20;
 
-        &:focus {
-            height:40px;   
-            padding: 10px;
-            background-color: #225FD7;
-            color: #dedede;
-        }
-
+    &:focus {
+        height:40px;   
+        padding: 10px;
+        background-color: #225FD7;
+        color: #dedede;
     }
+
+}
