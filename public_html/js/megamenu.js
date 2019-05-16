@@ -97,7 +97,7 @@ class MegaMenu {
       this.menu.classList.add(this.defaults.hoverClass);
       this.menu.addEventListener('mouseover', this.menuMouseOver.bind(this));
     }
-    this.selectedMenuId;//used only for keyboard navigation
+    this.selectedMenuIdx;//used only for keyboard navigation
     this.lastMenuId;
     this.inMenu = false;
     this.isClick = false;
@@ -137,12 +137,12 @@ class MegaMenu {
 
   }
   skipFocus(ev) {
-    if (this.selectedMenuId) {
+    if (this.selectedMenuIdx) {
       this.resetPanels();
     }
   }
   menuMouseOver(ev) {
-    if (this.selectedMenuId) {
+    if (this.selectedMenuIdx) {
       this.resetPanels();
     }
 
@@ -151,7 +151,7 @@ class MegaMenu {
     // console.log("body click")
     this.resetPanels();
     this.inMenu = false;
-    this.selectedMenuId = null;
+    this.selectedMenuIdx = null;
     this.isClick = true;
 
   }
@@ -161,7 +161,7 @@ class MegaMenu {
   }
   resetPanels() {
     this.inMenu = false;
-    this.selectedMenuId = null;
+    this.selectedMenuIdx = null;
     this.subPanels.forEach(p => {
 
       p.displayMenu(false);
@@ -173,7 +173,7 @@ class MegaMenu {
 
     // if (ev.keyCode === Keyboard.ESCAPE) {
     //   this.resetPanels();
-    ev.stopPropagation();
+    //ev.stopPropagation();
     // }
 
     switch (ev.keyCode) {
@@ -181,6 +181,16 @@ class MegaMenu {
       case Keyboard.ESCAPE:
         this.resetPanels();
         ev.stopPropagation();
+        break;
+      
+      case Keyboard.RIGHT:
+        this.advanceMenu(1);
+        break;
+      
+      case Keyboard.LEFT:
+        this.advanceMenu(-1);
+        break;
+        
 
     }
 
@@ -188,20 +198,39 @@ class MegaMenu {
 
 
   }
+  
+  advanceMenu(amt) {
+    let newIdx = (this.selectedMenuIdx + amt ) % this.subPanels.length;
+  //  console.log(`newIdx ${newIdx}`)
+    if (newIdx < 0) {
+      newIdx = this.subPanels.length-1;
+    }
+    if (!newIdx !== this.selectedMenuIdx) {
+      this.selectedMenuIdx = newIdx;  
+      this.updateMenuPanels(this.subPanels[newIdx].panelUUID);
+      
+    }
+    
+  }
+  
+  
+  
   updateMenuPanels(newSelectedId) {
-    this.subPanels.forEach(p => {
+    this.subPanels.forEach((p,idx) => {
+     //  console.log(`idx ${idx} `)
       if (p.panelUUID === newSelectedId) {
+        this.selectedMenuIdx = idx;
         p.displayMenu(true);
 
       } else {
         p.displayMenu(false);
       }
     })
-    if (!this.selectedMenuId && newSelectedId) {
+    if (!this.selectedMenuIdx && newSelectedId) {
       this.inMenu = true;
-      //  console.log("entering the menu");
+      
     }
-    this.selectedMenuId = newSelectedId;
+  
 
   }
 }
@@ -284,6 +313,7 @@ class MegaSubPanel {
       this.panel.setAttribute('aria-hidden', 'false');
       this.panel.setAttribute('aria-expanded', 'true');
       this.panelLink.setAttribute('aria-expanded', 'true');
+      this.panelLink.focus();
       this.panelLink.classList.add(this.menuParent.defaults.focusClass);
       this.panel.classList.add(this.menuParent.defaults.openClass);
     } else {
